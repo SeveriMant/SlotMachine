@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{%block title %}SlotMachine{% endblock %}
+{% block content %}
+<br>
+
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{ msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+<p>Saldo: {{ saldo }} €</p>
+<p>Panos: {{ bet }} €</p>
+
+{% if results %}
+    <h2>
+        {{ results[0] }} {{ results[1] }} {{ results[2] }}
+    </h2>
+
+    {% if win > 0 %}
+        <p>Voitit {{ win }} €!</p>
+    {% else %}
+        <p>Ei voittoa</p>
+    {% endif %}
+{% endif %}
+
+<button style="border-radius:5px; border-color: lightgray; color: black;">
+    <a style="color: black;" href="/spin">Spin
+    </a>
+</button>
+
+<button style="border-radius:5px; border-color: lightgray;">
+    <a style="color: black;" href="/raise">Raise
+    </a>
+</button>
+
+<button style="border-radius:5px; border-color: lightgray;">
+    <a style="color: black;" href="/lower">Lower
+    </a>
+</button>
+
+<form method="POST" action="/deposit" style="margin-top: 1rem;">
+    <label for="amount">Deposit amount:</label>
+    <input type="number" id="amount" name="amount" min="1" required>
+    <button type="submit" style="border-radius:5px; border-color: lightgray; margin-left: 0.5rem;">Deposit</button>
+</form>
+{% endblock %}
