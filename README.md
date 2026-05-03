@@ -66,13 +66,13 @@ New users start with a default balance of 100$
 
 
 ## Routes
-/login   | Shows login page, and logs user in
-/        | Shows the main page with slotmachine, balance, bet, and symbol payouts
-/spin    | Spins the slot machine
-/raise   | Raises current bet
-/lower   | Lowers current bet
-/deposit | Adds money to the current user's balance
-/logout  | Saves balance to users.json file and logs user out
+- /login   | Shows login page, and logs user in
+- /        | Shows the main page with slotmachine, balance, bet, and symbol payouts
+- /spin    | Spins the slot machine
+- /raise   | Raises current bet
+- /lower   | Lowers current bet
+- /deposit | Adds money to the current user's balance
+- /logout  | Saves balance to users.json file and logs user out
 
 
 ## Possible future ideas
