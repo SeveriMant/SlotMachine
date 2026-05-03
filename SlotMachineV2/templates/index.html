@@ -18,6 +18,12 @@
             <h3>Win: {{ payout }}</h3>
             <h3>Bet: {{ bet }}</h3>
         </div>
+        <div class="auto-spin-win">
+            {% if auto_spin_wins %}
+                <h3>Auto Spin Wins: {{ auto_spin_wins }}</h3>
+            {% endif%}
+        </div>
+
         <div class="grid">
             {% for row in grid %}
                 {% set row_index = loop.index0 %}
@@ -47,13 +53,13 @@
                 <button class="button" type="submit">Lower Bet</button>
             </form>
         </div>
-        <!-- Need to add auto-spin function to PYTHON
+
         <div class="game-buttons">
             <form style="margin-top: 10px;" action="/auto-spin" method="post">
                 <input type="number" id="auto_spin_count" name="auto_spin_count" min="1" required class="auto_deposit_input">
                 <button class="auto_deposit" type="submit">Auto Spin</button>
             </form>
-            -->
+
         </div>
         <div class="game-buttons">
             <form style="margin-top: 5px;" action="/deposit" method="post">
@@ -81,6 +87,6 @@
                 </div>
             {% endfor %}
         </div>
-       
+
     </body>
 {% endblock %}

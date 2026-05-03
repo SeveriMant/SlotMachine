@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.auto-spin-win {
+    color: darkred;
+    align-items: center;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 80px);

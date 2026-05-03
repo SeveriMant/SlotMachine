@@ -2,7 +2,7 @@
 import json
 import os
 from flask import Flask, render_template, session, request, redirect, url_for, flash
-from SlotMachineV2 import SlotMachine
+from SlotMachine import SlotMachine
 import time
 app = Flask(__name__)
 app.secret_key = "HysHys"
@@ -47,7 +47,9 @@ def get_game_state():
         "balance": session.get("balance", 100),
         "bet_index": bet_index,
         "bet": bet,
-        "winning_lines": session.get("winning_lines", [])
+        "winning_lines": session.get("winning_lines", []),
+        "auto_spin_winning_lines": session.get("auto_spin_winning_lines", []),
+        "auto_spin_wins": session.get("auto_spin_wins", 0)
     }
 
 # Checks before every request is the user logged in, redirected to login page if not
@@ -85,11 +87,16 @@ def index():
         payouts=game.payouts,
         symbol_odds=symbol_odds,
         winning_lines=game_state["winning_lines"],
+        auto_spin_winning_lines=session.get("auto_spin_winning_lines"),
+        auto_spin_wins=session.get("auto_spin_wins")
     )
 
 # Checking for insufficient funds, spins the slotmachine, updates grid of emojis, payout and balance to session
 @app.route("/spin")
 def spin():
+    session.pop("auto_spin_winning_lines", None)
+    session.pop("auto_spin_wins", None)
+
     game_state = get_game_state()
 
     balance = game_state["balance"]
@@ -112,6 +119,35 @@ def spin():
     session["winning_lines"] = winning_lines
 
     return redirect(url_for("index"))
+
+@app.route("/auto-spin", methods=["POST"])
+def auto_spin():
+    auto_spin_count = int(request.form["auto_spin_count"])
+    auto_spin_winning_lines =  []
+    auto_spin_wins = 0
+
+    game_state = get_game_state()
+    balance = game_state["balance"]
+    bet_index = game_state["bet_index"]
+    bet = game_state["bet"]
+
+
+    if bet * auto_spin_count > balance:
+        flash("Insufficient funds", "warning")
+        return redirect(url_for("index"))
+
+    for  _ in range(auto_spin_count):
+        grid = game.spin()
+        payout, winning_lines = game.check_wins(grid, bet)
+        auto_spin_winning_lines.append(winning_lines)
+        auto_spin_wins += payout
+
+    session["auto_spin_winning_lines"] = auto_spin_winning_lines
+    session["auto_spin_wins"] = auto_spin_wins
+    session["balance"] = balance - bet * auto_spin_count + auto_spin_wins
+    return redirect(url_for("index"))
+
+
 
 # Lowers the bet, updates it to session. lower.bet funct checks if already at min bet
 @app.route("/lower")
