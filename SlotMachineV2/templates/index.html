@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{%block title %}Slot Machine{% endblock %}
+
+
+{% block content %}
+
+    <body>
+        
+        <h1>🎰 Slot Machine</h1>
+        {% with messages = get_flashed_messages() %}
+            {% for msg in messages %}
+                <h2>{{ msg }}</h2>
+            {% endfor %}
+        {% endwith %}
+
+        <h2>Balance: {{ balance }}</h2>
+        <div class="stats">
+            <h3>Win: {{ payout }}</h3>
+            <h3>Bet: {{ bet }}</h3>
+        </div>
+        <div class="grid">
+            {% for row in grid %}
+                {% set row_index = loop.index0 %}
+
+                {% for symbol in row %}
+                    {% set col_index = loop.index0 %}
+                {% if [row_index, col_index] in winning_lines %}
+                    <div class="cell winning-cell">
+                        {{ symbol }}
+                    </div>
+                {% else %}
+                    <div class="cell">
+                        {{ symbol }}
+                    </div>
+                {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+        <div class="game-buttons">
+            <form action="/spin">
+                <button class="button" type="submit">Spin</button>
+            </form>
+            <form action="/raise">
+                <button class="button" type="submit">Raise Bet</button>
+            </form>
+            <form action="/lower">
+                <button class="button" type="submit">Lower Bet</button>
+            </form>
+        </div>
+        <!-- Need to add auto-spin function to PYTHON
+        <div class="game-buttons">
+            <form style="margin-top: 10px;" action="/auto-spin" method="post">
+                <input type="number" id="auto_spin_count" name="auto_spin_count" min="1" required class="auto_deposit_input">
+                <button class="auto_deposit" type="submit">Auto Spin</button>
+            </form>
+            -->
+        </div>
+        <div class="game-buttons">
+            <form style="margin-top: 5px;" action="/deposit" method="post">
+                <input type="number" id="deposit" name="deposit" min="1" required class="auto_deposit_input">
+                <button class="auto_deposit" type="submit">Deposit</button>
+            </form>
+        </div>
+
+        <div class="paytable">
+            <h4>Multipliers</h4>
+            {% for symbol, value in payouts.items() %}
+                <div class="multiplier">
+                    <div class="symbol">{{ symbol }}</div>
+                    <div>x{{ value }}</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="odds">
+            <h4>Odds</h4>
+            {% for symbol, odd in symbol_odds %}
+                <div class="multiplier">
+                    <div class="symbol">{{ symbol }}</div>
+                    <div>{{ odd }}%</div>
+                </div>
+            {% endfor %}
+        </div>
+       
+    </body>
+{% endblock %}
