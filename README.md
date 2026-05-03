@@ -13,6 +13,7 @@ Players can log in, spin a 3x3 slot machine, change their bet, and deposit more 
 - Emoji-based symbols
 - Weighted symbol odss
 - Bet raising and lowering
+- Simple auto-spin function
 - Deposit system
 - Winning row and diagonal function
 - Winning cells are highlighted
@@ -78,6 +79,5 @@ New users start with a default balance of 100$
 ## Possible future ideas
 - Real password checking
 - Sign-up page
-- Add auto-spin
 - Add sound effects
 - Add animations
